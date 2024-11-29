@@ -10,9 +10,27 @@ const db = new pg.Client({
 
 db.connect();
 
-db.query("select * from us", (err, res) => {
-    if (!err)
-        console.log(res.rows);
-    else
-        console.log(err);
-})
+
+export function addUser(uname, uemail, upassword) {
+    return new Promise((resolve, reject) => {
+        db.query("INSERT INTO users (uname, uemail, upassword) VALUES ($1, $2, $3)", [uname, uemail, upassword], (err, res) => {
+        if (err)
+            reject(err);
+        else
+            resolve(res);
+    });
+    })
+}
+
+export function getUserByName(uname){
+    return new Promise((resolve, reject) => {
+        // console.log(uname);
+        db.query("SELECT * FROM users WHERE uname=$1", [uname], (err, res) => {
+            if(err)
+                reject(err);
+            else
+                // console.log(res.rows);
+                resolve(res.rows);
+        })
+    })
+}
