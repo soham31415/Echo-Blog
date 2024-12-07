@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
-import Home from './pages/Home';
-import PostPage from './pages/PostPage';
+import Home from './pages/home';
+import PostPage from './components/postList';
 
 function App() {
   return (
@@ -10,7 +10,6 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/post/:id" element={<PostPage />} />
         </Routes>
       </div>
     </Router>

@@ -4,6 +4,7 @@ import { verifyToken } from './auth.js'
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import cors from 'cors';
 
 const app = express();
 const PORT = 5000;
@@ -12,6 +13,7 @@ dotenv.config();
 // Middleware to parse incoming JSON requests
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
+app.use(cors());
 
 // Simple route to check if the server is running
 app.get('/', (req, res) => {
