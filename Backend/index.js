@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
     res.send('Hello, World! Your server is running!');
   });
 
-app.post('/addUser', async (req, res) => {
+app.post('/register', async (req, res) => {
   const { uname, uemail, upassword } = req.body;
   const salt = await bcrypt.genSalt(10);
   const hashedPass = await bcrypt.hash(upassword, salt);
