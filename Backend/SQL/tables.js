@@ -126,3 +126,16 @@ export function getAllPosts(limit, offset) {
         );
     });
 }
+
+export function getPostsByUserId(uid){
+    return new Promise((resolve, reject) => {
+        db.query(
+            "SELECT * FROM posts WHERE uid=$1 ORDER BY created_at",
+            [uid],
+            (err, res) => {
+                if(err) reject(err);
+                else resolve(res.rows);
+            }
+        )
+    })
+}

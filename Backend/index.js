@@ -1,5 +1,5 @@
 import express from 'express';
-import { addUser, deleteUser, getUserByName, updateUser, createPost, getPostById, updatePost, getAllPosts } from './SQL/tables.js';
+import { addUser, deleteUser, getUserByName, updateUser, createPost, getPostById, updatePost, getAllPosts, getPostsByUserId } from './SQL/tables.js';
 import { verifyToken } from './auth.js'
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
@@ -82,11 +82,15 @@ app.get("/user/:uname", async (req, res) => {
 app.put('/updateUser/:uname', verifyToken, async (req, res) => {
   const uname = req.params.uname;
   const { uemail, upassword } = req.body;
+  const salt = await bcrypt.genSalt(10);
+  const hashedPass = await bcrypt.hash(upassword, salt);
 
   try {
-    const msg = await updateUser(uname, uemail, upassword);
-    if(msg.rowCount > 0)
+    const user = await getUserByName(uname);
+    if(user.length > 0){
+      const msg = await updateUser(uname, uemail, hashedPass);
       res.status(200).json({msg: "Data for username: " + uname + " updated successfully"});
+    }
     else
       res.status(404).json({msg: "Username not found"});
 
@@ -153,7 +157,7 @@ app.get('/posts', async (req, res) => {
   }
 });
 
-app.get('/posts/:id', async (req, res) => {
+app.get('/posts/id/:id', async (req, res) => {
   const post_id = parseInt(req.params.id);
 
   try {
@@ -165,6 +169,21 @@ app.get('/posts/:id', async (req, res) => {
       res.status(500).json({ error: "Failed to fetch post" });
   }
 });
+
+app.get('/posts/userid/:uid', verifyToken, async (req, res) => {
+  const uid = parseInt(req.params.uid);
+
+  try {
+    const posts = await getPostsByUserId(uid);
+    if (posts.length > 0)
+      res.status(200).json({ posts });
+    else
+      res.status(404).json({ error: "User has no posts" });
+  } catch (error) {
+    console.error(error.message);
+      res.status(500).json({ error: "Failed to fetch posts due to server or database error" });
+  }
+})
   
 // Start the server
 app.listen(PORT, () => {

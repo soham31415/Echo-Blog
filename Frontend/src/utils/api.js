@@ -33,7 +33,10 @@ export const postService = {
     api.get(`/posts?limit=${limit}&offset=${offset}`),
   
   getPostById: (postId) => 
-    api.get(`/posts/${postId}`),
+    api.get(`/posts/id/${postId}`),
+
+  getPostsByUserId: (userId) => 
+    api.get(`/posts/id/${userId}`),
   
   createPost: (postData) => 
     api.post('/addPost', postData),

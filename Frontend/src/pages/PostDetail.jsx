@@ -43,7 +43,9 @@ const PostDetail = () => {
           <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
           <div className="flex justify-between items-center mb-4 text-gray-600">
             <span>Published on {new Date(post.created_at).toLocaleDateString()}</span>
-            {isAuthenticated && user.uid === post.uid && (
+            {isAuthenticated 
+            && user.uid === post.uid 
+            && (
               <div>
                 <button 
                   onClick={handleEdit}

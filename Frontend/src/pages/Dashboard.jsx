@@ -14,8 +14,8 @@ const Dashboard = () => {
     const fetchUserPosts = async () => {
       try {
         // Note: You might want to add a backend route to fetch posts by user ID
-        const response = await postService.getAllPosts();
-        const userPosts = response.data.posts.filter(post => post.uid === user.uid);
+        const response = await postService.getPostsByUserId(user.uid);
+        const userPosts = response.data.posts;
         setPosts(userPosts);
         setLoading(false);
       } catch (err) {
